@@ -82,3 +82,37 @@ Manage Users/Status                ✅         ❌           ❌
 
 **Dashboard**
 GET /api/v1/dashboard/summary - Get aggregated financial stats.
+
+
+
+
+
+
+-----------------------------------------------------------TESTING GUIDE IN POSTMAN------------------------------------------------------------------------------
+
+## 🧪 Step-by-Step Testing Guide (Postman)
+
+To verify the **RBAC** and **Dashboard** logic, follow these steps in Postman:
+
+### Phase 1: Authentication
+1. **Register Admin**: `POST /api/v1/auth/register` with `role: "Admin"`.
+2. **Register Viewer**: `POST /api/v1/auth/register` with `role: "Viewer"`.
+3. **Login as Admin**: `POST /api/v1/auth/login`. This sets the `accessToken` in your Cookies.
+
+### Phase 2: Data Entry (Admin Only)
+1. **Create Income**: POST /api/v1/records
+   { "amount": 5000, "type": "Income", "category": "Freelance", "description": "Project Alpha" }
+
+2. **Create Expense**: POST /api/v1/records
+   { "amount": 1200, "type": "Expense", "category": "Food", "description": "Monthly Groceries" }
+
+3: **Analytics & Filtering**
+**Dashboard Summary**: GET /api/v1/dashboard/summary
+Expected: totalIncome: 5000, totalExpense: 1200, netBalance: 3800.
+Filtered Records: GET /api/v1/records?type=Income
+Expected: Only "Income" records should appear.
+
+4: **Access Control Verification**
+Login as Viewer: POST /api/v1/auth/login using the Viewer's credentials.
+Attempt Unauthorized Action: Try to POST a new record as a Viewer.
+Expected Result: 403 Forbidden with an error message: "Access Denied: Your role (Viewer) is not allowed..."
