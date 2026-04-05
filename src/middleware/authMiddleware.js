@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser';
 export const protect = catchAsync(async (req, res, next) => {
   let token;
 
-  // Check Cookies first, then Header as fallback
+  // first we check the cookies, then Header as fallback
   if (req.cookies.accessToken) {
     token = req.cookies.accessToken;
   } else if (req.headers.authorization?.startsWith('Bearer')) {
@@ -32,7 +32,7 @@ export const protect = catchAsync(async (req, res, next) => {
     return next(new AppError('Your account is inactive. Please contact admin.', 403));
   }
 
-  // Grant Access to Protected Route
+  // we Grant the Access to the Protected Route
   req.user = currentUser;
   next();
 });

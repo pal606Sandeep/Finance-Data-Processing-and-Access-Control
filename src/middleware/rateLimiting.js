@@ -10,7 +10,7 @@ export const globalLimiter = rateLimit({
   legacyHeaders: false, 
 });
 
-// Stepped up limit for Auth routes (Login/Register)
+// limit for Auth routes like (Login or Register)
 export const authLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
   max: 10, 
